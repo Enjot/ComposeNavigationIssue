@@ -1,5 +1,7 @@
 package com.enjot.composenavigationissue
 
+import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,16 +15,21 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.currentStateAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -101,6 +108,8 @@ fun MapScreen(
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(LatLng(50.06, 19.93), 15f)
     }
+
+
     Box(
         contentAlignment = Alignment.BottomCenter,
         modifier = Modifier.fillMaxSize()
@@ -108,7 +117,15 @@ fun MapScreen(
         GoogleMap(
             cameraPositionState = cameraPositionState,
             modifier = Modifier.fillMaxSize()
-        )
+        ) {
+            val lifecycleOwner = LocalLifecycleOwner.current
+            val lifecycleState = lifecycleOwner.lifecycle.currentStateAsState()
+
+            LaunchedEffect(lifecycleState) {
+                Log.d("MapScreen", "Lifecycle changed to ${lifecycleState.value}")
+            }
+
+        }
         Button(
             onClick = navigateToDetailScreen,
             modifier = Modifier.padding(bottom = 32.dp)
@@ -123,6 +140,13 @@ fun DetailScreen() {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
+            .background(Brush.linearGradient(
+                listOf(
+                    Color.LightGray,
+                    Color.Magenta
+                )
+                )
+            )
     ) {
         Text("Detail Screen")
     }

@@ -1,6 +1,5 @@
 package com.enjot.composenavigationissue
 
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -42,6 +41,7 @@ private val topLevelRoutes = listOf(
 @Composable
 fun Navigation2() {
     val navController = rememberNavController()
+
     Scaffold(
         bottomBar = {
             BottomAppBar {
@@ -55,6 +55,9 @@ fun Navigation2() {
                         icon = topLevelRoute.icon,
                         isSelected = selected,
                         onClick = {
+//                            val lifecycle = navBackStackEntry?.lifecycle?.currentState
+//                            if (lifecycle == Lifecycle.State.RESUMED && !selected) {
+//                            }
                             navController.navigate(topLevelRoute.route) {
                                 popUpTo(navController.graph.findStartDestination().id) {
                                     saveState = true

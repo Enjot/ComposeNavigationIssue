@@ -13,8 +13,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ComposeNavigationIssueTheme {
-                Navigation2()
-//                Navigation3()
+//                Navigation2()
+                Navigation3()
             }
         }
     }

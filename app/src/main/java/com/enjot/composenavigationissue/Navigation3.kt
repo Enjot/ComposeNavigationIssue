@@ -11,7 +11,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
@@ -45,7 +44,6 @@ private val TOP_LEVEL_ROUTES: List<TopLevelDestination> = listOf(Home, Map)
 
 @Composable
 fun Navigation3() {
-    val stateHolder = rememberSaveableStateHolder()
     val topLevelBackStack = remember { TopLevelBackStack<Any>(Home) }
 
     Scaffold(
@@ -70,18 +68,16 @@ fun Navigation3() {
             onBack = { topLevelBackStack.removeLast() },
             entryProvider = entryProvider {
                 entry<Home> {
-                    stateHolder.SaveableStateProvider(Home.name) {
-                        HomeScreen(
-                            navigateToDetailScreen = { topLevelBackStack.add(Detail) }
-                        )
-                    }
+                    HomeScreen(
+                        navigateToDetailScreen = {
+                            topLevelBackStack.add(Detail)
+                        }
+                    )
                 }
                 entry<Map> {
-                    stateHolder.SaveableStateProvider(Map.name) {
-                        MapScreen(
-                            navigateToDetailScreen = { topLevelBackStack.add(Detail) }
-                        )
-                    }
+                    MapScreen(
+                        navigateToDetailScreen = { topLevelBackStack.add(Detail) }
+                    )
                 }
                 entry<Detail> {
                     DetailScreen()
@@ -130,6 +126,9 @@ class TopLevelBackStack<T : Any>(startKey: T) {
     }
 
     fun add(key: T) {
+        if (topLevelStacks[topLevelKey]!!.contains(key))
+            return
+
         topLevelStacks[topLevelKey]?.add(key)
         updateBackStack()
     }
