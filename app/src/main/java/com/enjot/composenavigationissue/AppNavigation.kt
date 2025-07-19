@@ -1,12 +1,15 @@
 package com.enjot.composenavigationissue
 
-import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -40,7 +43,7 @@ private val topLevelRoutes = listOf(
 )
 
 @Composable
-fun Navigation2() {
+fun AppNavigation() {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = {
@@ -88,4 +91,24 @@ fun Navigation2() {
             }
         }
     }
+}
+
+@Composable
+fun RowScope.NavBarItem(
+    name: String,
+    icon: ImageVector,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    NavigationBarItem(
+        icon = {
+            Icon(
+                imageVector = icon,
+                contentDescription = name
+            )
+        },
+        label = { Text(name) },
+        selected = isSelected,
+        onClick = onClick
+    )
 }
