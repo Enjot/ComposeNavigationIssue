@@ -26,21 +26,6 @@ import kotlinx.serialization.Serializable
 // Implementation based on
 // https://developer.android.com/develop/ui/compose/navigation#bottom-nav
 
-@Serializable
-private data object HomeRoute
-
-@Serializable
-private data object MapRoute
-
-@Serializable
-private data object DetailRoute
-
-private data class TopLevelRoute<T : Any>(val name: String, val route: T, val icon: ImageVector)
-
-private val topLevelRoutes = listOf(
-    TopLevelRoute("Home", HomeRoute, Icons.Default.Home),
-    TopLevelRoute("Map", MapRoute, Icons.Default.Map)
-)
 
 @Composable
 fun AppNavigation() {
