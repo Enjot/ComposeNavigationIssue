@@ -14,6 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -30,6 +33,7 @@ import kotlinx.serialization.Serializable
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
+    val lifecycleOwner = LocalLifecycleOwner.current
     Scaffold(
         bottomBar = {
             BottomAppBar {
@@ -67,9 +71,14 @@ fun AppNavigation() {
                 )
             }
             composable<MapRoute> {
-                MapScreen(
-                    navigateToDetailScreen = { navController.navigate(DetailRoute) }
-                )
+                LifecycleOwner(
+                    maxLifecycle = Lifecycle.State.RESUMED,
+                    parentLifecycleOwner = lifecycleOwner
+                ) {
+                    MapScreen(
+                        navigateToDetailScreen = { navController.navigate(DetailRoute) }
+                    )
+                }
             }
             composable<DetailRoute> {
                 DetailScreen()
